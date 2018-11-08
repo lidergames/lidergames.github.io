@@ -1,18 +1,29 @@
 var playGame = function(){}
 var LoadingText;
+var gameOptions = {
+    playerSpeed: 120,
+    playerJumpSpeed: {
+        x: 30,
+        y: -100
+    },
+    tileSize: 32,
+    changeDirectionRange: 32,
+    playerGravity: 400
+}
+var time=0;
+var score = 0;
 playGame.prototype = {
     preload: function(){
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
-        game.load.image("rock", "rock.png");
         game.load.image("block", "block.png");
-        game.load.image("player", "ball.png");
         game.load.spritesheet('leha','img/sprite.png',96,96)
 	game.load.image("bg","img/BG.png");
     game.load.image("CERESIT","img/CERESIT.png");
     game.load.image("TEX","img/TEX.png");
     game.load.image("FUGEN","img/FUGEN.png");
+    game.load.image("triangle",'img/triangle.png');
     },
     create: function(){
         this.sps = [];
@@ -48,7 +59,7 @@ playGame.prototype = {
 
         this.score = 0;
         this.scoreText = game.add.text(5,5,
-            'spaseno : '+ this.score,
+            'спасено : '+ this.score,
         {
             font: '12px "Press Start 2P"',
             fill: '#FFFFFF',
@@ -57,7 +68,7 @@ playGame.prototype = {
             align: 'center'
         });
         this.moneyText = game.add.text(5,30,
-            'zarplata : '+ this.money,
+            'зарплата : '+ this.money,
         {
             font: '12px "Press Start 2P"',
             fill: '#FFFFFF',
@@ -67,7 +78,7 @@ playGame.prototype = {
         });
 
         this.timeText = game.add.text(game.world.width/2,20,
-            'Vremy tresu4ki : '+ this.currentTime,
+            'общее время : '+ this.currentTime,
         {
             font: '12px "Press Start 2P"',
             fill: '#FFFFFF',
@@ -81,7 +92,7 @@ playGame.prototype = {
     tick: function() {
         game.camera.shake(0.005, 500);
         this.currentTime ++;
-        this.timeText.setText('Vremy tresu4ki : '+ this.currentTime);
+        this.timeText.setText('общее время : '+ this.currentTime);
     },
     my_timer: function() {
         time++;
@@ -106,15 +117,24 @@ playGame.prototype = {
             //console.info(sp.body.y);
             this.sps.push(sp);
 
+            var triangleSprite = game.add.sprite(xRandom,45,"triangle");
+            triangleSprite.anchor.set(0.5);
+            var d = 500 /90 * yRandom;
+            if(d<0) { d *=-1; }
+            game.add.tween(triangleSprite).to({ y: 15 }, d, Phaser.Easing.Bounce.Out, true);
+            var tw1 = game.add.tween(triangleSprite).to({ alpha: 0 }, d, Phaser.Easing.Linear.None, true);
+            tw1.onComplete.add(function() {
+                triangleSprite.destroy(true);
+            });
         }
         
     },
     moveLeha: function() {
         if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            this.leha.body.velocity.x = 100;
+            this.leha.body.velocity.x = 130;
     }
         if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            this.leha.body.velocity.x = -100;
+            this.leha.body.velocity.x = -130;
     }
     },
     update:function(){
@@ -149,12 +169,12 @@ playGame.prototype = {
         this.score++;
         //console.info("collide");
         sprite.destroy(true);
-        this.scoreText.setText('spaseno : '+ this.score);
+        this.scoreText.setText('спасено : '+ this.score);
     },
     collisionHandlerGround : function(obj1,sprite) {
         this.money -=250;
-        this.moneyText.setText("zarplata : "+ this.money);
-        var t = game.add.text(30,30,
+        this.moneyText.setText("зарплата : "+ this.money);
+        var t = game.add.text(150,30,
             '-250p',
         {
             font: '10px "Press Start 2P"',

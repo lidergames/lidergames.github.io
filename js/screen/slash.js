@@ -1,28 +1,37 @@
 var slashScreen = function() {}
-slashScreen.prototype = {
-    preload: function(){ },
-    create: function() {
-        this.tt = 20;
-        game.stage.backgroundColor = '#FFFFFF';
-        LoadingText = game.add.text(game.world.width/2,game.world.height/2,
-            'LEXA I ZEMLETRESU4KA!\nИДЕТ ЗЕМЛЯТРЕСЕНИЕ!\nИ ТОЛЬКО ЛЁХА МОЖЕТ СПАСТИ\nЛИДЕР ОТ РАЗОРЕНИЯ, ПОЙМАВ\nВСЕ ПАДАЮЩИЕ СМЕСИ И КРАСКИ\nза каждую разбитую, его штрафуют\nна 250р :D',
-        {
-            font: '16px "Press Start 2P"',
-            fill: '#FFFFFF',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        });
-        LoadingText.anchor.setTo(0.5,0.5);
-
-        var tween = game.add.tween(LoadingText).to({
+var textArray = ["ЛЁХА И ЗЕМЛЯТРЯСУ4КА",
+        "идёт землятресение!",
+        "только бравый грузчик Лёха",
+        "может спасти Лидер от убытков",
+        "поймав падающие краски и смеси.",
+        "за каждую разбитую, его штрафуют",
+        "на 250р :D"];
+var button;
+var actionOnClick = function() {
+        console.info("click");
+    var tw = game.add.tween(button).to({
         alpha: 0
-    }, this.tt*1000, Phaser.Easing.Linear.None, true);
-    tween.onComplete.add(function() {
-        game.state.start('PlayGame', false, false);
-}, this);
+        }, 500, Phaser.Easing.Linear.None, true);
+            tw.onComplete.add(function() {
+                game.state.start('PlayGame', false, false);
+            });
+}
+slashScreen.prototype = {
+    preload: function(){
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically = true;
+        game.load.spritesheet('button','img/button.png',96,24);
+     },
 
-    this.timerT = game.add.text(game.world.width/2,game.world.height-50,
+    create: function() {
+        this.textLogo = [];
+        
+        this.tt = 10;
+        this.idx = 0;
+        game.stage.backgroundColor = '#FFFFFF';
+
+        this.timerT = game.add.text(game.world.width/2,game.world.height-50,
             'ДО НАЧАЛА : '+ this.tt,
         {
             font: '12px "Press Start 2P"',
@@ -35,15 +44,35 @@ slashScreen.prototype = {
         game.time.events.loop(Phaser.Timer.SECOND, this.tick,this);
     
      },	
+     
      tick: function() {
         this.tt--;
         if(this.tt<=0) {
-            game.add.tween(this.timerT).to({
+            var tw = game.add.tween(this.timerT).to({
         alpha: 0
-    }, 500, Phaser.Easing.Linear.None, true);
+        }, 500, Phaser.Easing.Linear.None, true);
+            tw.onComplete.add(function() {
+                button = game.add.button(game.world.centerX - 48, game.world.height - 50 - 12, 'button', actionOnClick, this, 2, 1, 0);
+            });
         }
+
         this.timerT.setText('ДО НАЧАЛА : '+ this.tt);
+
+        if(this.idx<textArray.length) {
+            var line = game.add.text(game.world.width/2, 64 + this.idx * 22, textArray[this.idx],  {
+            font: '18px "Press Start 2P"',
+            fill: '#F04EFF',
+            stroke: '#000000',
+            strokeThickness: 3,
+            align: 'center'
+        });
+            line.anchor.setTo(0.5);
+            line.alpha = 0.1;
+            game.add.tween(line).to({
+        alpha: 1
+        }, 1500, Phaser.Easing.Linear.None, true);
+        }
+        this.idx++;
      },
 update : function() {}
-
 }

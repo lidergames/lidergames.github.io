@@ -5,11 +5,7 @@
  
   <title>Minesweeper</title>
  
-  <style>
-    body {
-      margin: 0;
-    }
-  </style>
+  <style>* { padding: 0; margin: 0; }</style>
  
   <!-- Game Engine -->
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -27,8 +23,8 @@
         },
         active: function() {
               var pass = prompt('Введите пароль!');
-                if(pass == 'lider2018') {
-                  alert('Доступ разрешон ;)');
+                if(pass == 'l') {
+                  alert('Есть контакт! ;)');
                   GameInitialize();
                 } else if(pass == null){
                   alert('Отмена');
