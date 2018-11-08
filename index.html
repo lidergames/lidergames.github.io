@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+ 
+  <title>Minesweeper</title>
+ 
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+ 
+  <!-- Game Engine -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script src="js/phaser.min.js"></script>
+  <script src="js/screen/slash.js"></script>
+  <script src="js/screen/game_screen.js"></script>
+  <script src="game.js"></script>
+</head>
+<body>
+ 
+ <script> 
+     WebFont.load({
+        google: {
+            families: ['Press+Start+2P']
+        },
+        active: function() {
+              var pass = prompt('Введите пароль!');
+                if(pass == 'lider2018') {
+                  alert('Доступ разрешон ;)');
+                  GameInitialize();
+                } else if(pass == null){
+                  alert('Отмена');
+                }else {
+                  alert('Неверный пароль');
+                }
+    }
+  }
+    );;
+ </script>
+</body>
+</html>
