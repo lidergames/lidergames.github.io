@@ -1,14 +1,15 @@
 var playGame = function(){}
 var LoadingText;
 var gameOptions = {
-    playerSpeed: 120,
+    playerSpeed: 130,
+    obfuscation: 1,
     playerJumpSpeed: {
         x: 30,
         y: -100
     },
     tileSize: 32,
     changeDirectionRange: 32,
-    playerGravity: 400
+    playerGravity: 400,
 }
 var time=0;
 var score = 0;
@@ -19,30 +20,33 @@ playGame.prototype = {
         game.scale.pageAlignVertically = true;
         game.load.image("block", "block.png");
         game.load.spritesheet('leha','img/sprite.png',96,96)
-	game.load.image("bg","img/BG.png");
-    game.load.image("CERESIT","img/CERESIT.png");
-    game.load.image("TEX","img/TEX.png");
-    game.load.image("FUGEN","img/FUGEN.png");
-    game.load.image("triangle",'img/triangle.png');
+	    game.load.image("bg","img/BG.png");
+        game.load.image("CERESIT","img/CERESIT.png");
+        game.load.image("TEX","img/TEX.png");
+        game.load.image("FUGEN","img/FUGEN.png");
+        game.load.image("triangle",'img/triangle.png');
     },
     create: function(){
         this.sps = [];
         this.money = 16000;
         this.currentTime = 0;
+        this.stage0 = game.add.group(); // BG 
+        this.stage = game.add.group(); // Леха и объекты 
 
 	
-	   this.bg = game.add.sprite(0,0,"bg");
-	   this.bg1 = game.add.sprite(288,0,"bg");
+	   this.bg = this.stage0.create(0,0,"bg");
+	   this.bg1 = this.stage0.create(288,0,"bg");
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.leha = game.add.sprite(150,150,'leha');
+        this.leha = this.stage.create(150,150,'leha');
+        this.leha.indexOnLayer = 10;
         this.leha.anchor.set(0.5);
         this.leha.animations.add('right', [ 1, 2, 3], 5, true);
         this.leha.animations.add('left',[ 4, 5, 6 ],true);
         this.leha.animations.add('non', [ 0 ], 20, true);
         this.leha.animations.play('non',5,true);
         game.physics.enable(this.leha,Phaser.Physics.ARCADE);
-	   this.leha.body.setSize(75,30,12,65);
+	   this.leha.body.setSize(75,20,12,75);//ВАЖНО
         this.leha.body.gravity.y = gameOptions.playerGravity;
         //this.leha.body.collideWorldBounds = true;
         this.leha.body.bounce.setTo(0.2, 0.2);
@@ -103,19 +107,21 @@ playGame.prototype = {
             var xRandom = game.rnd.integerInRange(30, 550);
             var yRandom = game.rnd.integerInRange(-60,-650);
             if(i == 1) {
-                sp = game.add.sprite(xRandom, yRandom, "TEX");
+                sp = this.stage.create(xRandom, yRandom, "TEX");
             } else if(i == 2) {
-                sp = game.add.sprite(xRandom, yRandom, "CERESIT");
+                sp = this.stage.create(xRandom, yRandom, "CERESIT");
             } else {
-                sp = game.add.sprite(xRandom, yRandom, "FUGEN");
+                sp = this.stage.create(xRandom, yRandom, "FUGEN");
             }
             game.physics.enable(sp,Phaser.Physics.ARCADE);
             sp.anchor.set(0.5);
+            sp.indexOnLayer = 1;
             sp.body.gravity.y = game.rnd.integerInRange(200, 550);
             //sp.body.collideWorldBounds = true;
             sp.body.setSize(25,25,34,71);
             //console.info(sp.body.y);
             this.sps.push(sp);
+            this.stage.sort('indexOnLayer',Phaser.Group.SORT_ASCENDING);
 
             var triangleSprite = game.add.sprite(xRandom,45,"triangle");
             triangleSprite.anchor.set(0.5);
@@ -126,15 +132,16 @@ playGame.prototype = {
             tw1.onComplete.add(function() {
                 triangleSprite.destroy(true);
             });
+            
         }
         
     },
     moveLeha: function() {
         if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            this.leha.body.velocity.x = 130;
+            this.leha.body.velocity.x = gameOptions.playerSpeed*gameOptions.obfuscation;
     }
         if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            this.leha.body.velocity.x = -130;
+            this.leha.body.velocity.x = (-gameOptions.playerSpeed)*gameOptions.obfuscation;
     }
     },
     update:function(){
@@ -142,11 +149,14 @@ playGame.prototype = {
 	if(this.leha.body.velocity.x<5 && this.leha.body.velocity.x>-5 ) {
 		//console.info(this.leha.body.velocity.x);
 		this.leha.animations.play('non');
+         this.leha.body.setSize(75,20,12,75);//ВАЖНО
 	}
 	if(this.leha.body.velocity.x>5) {
 		this.leha.animations.play('right',5,true);
+         this.leha.body.setSize(70,20,25,75);//ВАЖНО
 	} else if(this.leha.body.velocity.x<-5) {
         this.leha.animations.play('left',5,true);
+         this.leha.body.setSize(75,20,2,75);//ВАЖНО
     }
 
     //Коллизии 
@@ -194,13 +204,28 @@ playGame.prototype = {
 }, this);
     },
 	render: function() {
-		//game.debug.bodyInfo(this.leha, 32, 32);
+		//this.debug();
+	},
+    debug: function() {
+        //game.debug.bodyInfo(this.leha, 32, 32);
         game.debug.body(this.leha);
-		game.debug.body(this.ground);
+        //game.debug.body(this.ground);
         for(var i = 0; i< this.sps.length; i++) {
             game.debug.body(this.sps[i])
-        }
-	}
+       }
+    }
 
 }
 var text;
+function createText(text,x,y,size) {
+    return game.add.text(x,y,
+            text,
+        {
+            font: size+'px "Press Start 2P"',
+            fill: '#FF3333',
+            stroke: '#000000',
+            strokeThickness: 3,
+            align: 'center'
+        });
+
+}

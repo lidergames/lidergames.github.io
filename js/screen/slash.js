@@ -53,6 +53,7 @@ slashScreen.prototype = {
         }, 500, Phaser.Easing.Linear.None, true);
             tw.onComplete.add(function() {
                 button = game.add.button(game.world.centerX - 48, game.world.height - 50 - 12, 'button', actionOnClick, this, 2, 1, 0);
+                button.scale.setTo(1.5);
             });
         }
 
