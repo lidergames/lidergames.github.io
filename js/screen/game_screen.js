@@ -26,9 +26,17 @@ playGame.prototype = {
         game.load.image("FUGEN","img/FUGEN.png");
         game.load.image("triangle",'img/triangle.png');
     },
+    destroyAll: function() {
+        this.stage.visible = false;
+        this.stage0.visible = false;
+        this.scoreText.visible = false;
+        this.moneyText.visible = false;
+        this.timeText.visible = false;
+        this.t.visible = false;
+    },
     create: function(){
         this.sps = [];
-        this.money = 16000;
+        this.money = 9000;
         this.currentTime = 0;
         this.stage0 = game.add.group(); // BG 
         this.stage = game.add.group(); // Леха и объекты 
@@ -61,41 +69,34 @@ playGame.prototype = {
         this.ground.body.immovable = true;
         //ground.body.immovable = true; 
 
-        this.score = 0;
-        this.scoreText = game.add.text(5,5,
-            'спасено : '+ this.score,
-        {
-            font: '12px "Press Start 2P"',
-            fill: '#FFFFFF',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        });
-        this.moneyText = game.add.text(5,30,
-            'зарплата : '+ this.money,
-        {
-            font: '12px "Press Start 2P"',
-            fill: '#FFFFFF',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        });
+        this.cocomboSystemCreate();
+    },
+    cocomboSystemCreate: function() {
+        this.createUIText();
+        this.cocombo = [];
+        this.cocombo[0] = 0;
+        this.cocombo[1] = 4;
 
-        this.timeText = game.add.text(game.world.width/2,20,
-            'общее время : '+ this.currentTime,
-        {
-            font: '12px "Press Start 2P"',
-            fill: '#FFFFFF',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        });
-        this.timeText.anchor.setTo(0.5);
-
+        this.cocombo_text = [];
+        this.cocombo_text = ['',
+            'не плохо',
+            'хорошо',
+            'молодец!',
+            'отлично!',
+            'великолепно!',
+            'да кто ты такой?',
+            'ты читер?!',
+            'божественно!',
+            'нет слов!',
+            'заканчивай игру!',
+            'це фантастично!'
+        ];
+        this.cocombo_max = 0;
     },
     tick: function() {
         game.camera.shake(0.005, 500);
         this.currentTime ++;
+        score = this.currentTime;
         this.timeText.setText('общее время : '+ this.currentTime);
     },
     my_timer: function() {
@@ -137,10 +138,12 @@ playGame.prototype = {
         
     },
     moveLeha: function() {
-        if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+        if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) || 
+            game.input.mousePointer.isDown && game.input.x>game.world.centerX) {
             this.leha.body.velocity.x = gameOptions.playerSpeed*gameOptions.obfuscation;
     }
-        if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+        if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT) || 
+            game.input.mousePointer.isDown && game.input.x<game.world.centerX) {
             this.leha.body.velocity.x = (-gameOptions.playerSpeed)*gameOptions.obfuscation;
     }
     },
@@ -172,7 +175,10 @@ playGame.prototype = {
         }
         this.moveLeha();
 
-
+        if(this.money<=0) {
+            //this.destroyAll();
+            game.state.start('GameOver', true, false);
+        }
 
     },
     collisionHandler : function(obj,sprite) {
@@ -180,27 +186,28 @@ playGame.prototype = {
         //console.info("collide");
         sprite.destroy(true);
         this.scoreText.setText('спасено : '+ this.score);
+        this.cocombo[0] +=1;
+        this.cocomboUpdate();
+        createTextAndTween("x"+this.cocombo[0],
+            sprite.x,
+            sprite.y,
+            sprite.x,
+            sprite.y-25,
+            15,700).angle = 35;
     },
     collisionHandlerGround : function(obj1,sprite) {
         this.money -=250;
+        this.cocombo[0] = 0;
         this.moneyText.setText("зарплата : "+ this.money);
-        var t = game.add.text(150,30,
-            '-250p',
-        {
-            font: '10px "Press Start 2P"',
-            fill: '#FF3333',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        });
+        this.t = createText('-250р',150,30,10);
         sprite.destroy(true);
 
-        game.add.tween(t).to( { y: 60 }, 1000, Phaser.Easing.Bounce.Out, true);
-        var tw = game.add.tween(t).to({
+        game.add.tween(this.t).to( { y: 60 }, 1000, Phaser.Easing.Bounce.Out, true);
+        var tw = game.add.tween(this.t).to({
         alpha: 0
     }, 1000, Phaser.Easing.Linear.None, true);
         tw.onComplete.add(function() {
-        t.destroy(true);
+        this.t.destroy(true);
 }, this);
     },
 	render: function() {
@@ -213,19 +220,100 @@ playGame.prototype = {
         for(var i = 0; i< this.sps.length; i++) {
             game.debug.body(this.sps[i])
        }
-    }
-
-}
-var text;
-function createText(text,x,y,size) {
-    return game.add.text(x,y,
-            text,
+    },
+    createUIText: function() {
+        this.score = 0;
+        this.scoreText = game.add.text(5,5,
+            'спасено : '+ this.score,
         {
-            font: size+'px "Press Start 2P"',
-            fill: '#FF3333',
+            font: '12px "Press Start 2P"',
+            fill: text_color,
+            stroke: '#000000',
+            strokeThickness: 3,
+            align: 'center'
+        });
+        this.moneyText = game.add.text(5,30,
+            'зарплата : '+ this.money,
+        {
+            font: '12px "Press Start 2P"',
+            fill: text_color,
             stroke: '#000000',
             strokeThickness: 3,
             align: 'center'
         });
 
+        this.timeText = game.add.text(game.world.width/2,20,
+            'общее время : '+ this.currentTime,
+        {
+            font: '12px "Press Start 2P"',
+            fill: text_color,
+            stroke: '#000000',
+            strokeThickness: 3,
+            align: 'center'
+        });
+        this.timeText.anchor.setTo(0.5);
+    },
+    cocomboUpdate: function() {
+        if((this.cocombo[0] % this.cocombo[1]) == 0 ) {
+            var result = (this.cocombo[0] / this.cocombo[1])
+            console.info(result);
+            if(this.cocombo_max<result) {
+                this.cocombo_max = result;
+                gameOptions.playerSpeed +=25;
+            }
+
+            var idx = result < 11 ? result : 10;
+            var txt = createText(this.cocombo_text[idx],
+                game.world.width / 2,
+                288 / 2,
+                25);
+            txt.anchor.setTo(0.5);
+            txt.angle = rnd(0,1) == 1 ?  35 : -35;
+            //game.add.tween(txt).to( { scale: 2 }, 1000, Phaser.Easing.Bounce.Out, true);
+            game.add.tween(txt).to({
+        alpha: 0
+    }, 1000, Phaser.Easing.Linear.None, true).onComplete.add(function() {
+        txt.destroy(true);
+        }, this);
+        }
+    }
+
+}
+var text;
+function rnd(min,max) {
+    return  game.rnd.integerInRange(min, max);
+}
+function createText(text,x,y,size) {
+    return game.add.text(x,y,
+            text,
+        {
+            font: size+'px "Press Start 2P"',
+            fill: '#FF0000',
+            stroke: '#000000',
+            strokeThickness: 3,
+            align: 'center'
+        });
+
+}
+function createTextAndTween(text,from_x,from_y,to_x,to_y,size,time) {
+    var txt = createText(text,from_x,from_y,size);
+    game.add.tween(txt).to( { y: to_y }, time, Phaser.Easing.Bounce.Out, true);
+    var tw = game.add.tween(txt).to({ alpha: 0 },
+            time, Phaser.Easing.Linear.None, true);
+    tw.onComplete.add(function() {
+        txt.destroy(true);
+    }, this);
+    return txt;
+}
+var particles = [];
+function createParticle(x,y,count) {
+    for (var i = 0; i<count ; i++) {
+        var xVel = rnd(-1,1);
+        var yVel = rnd(2,1);
+
+        var particle = this.stage.create(x, y, "block");
+        particle.xVelocity = xVel;
+        particle.yVelocity = yVel;
+        particles.push(particle);
+    }
 }

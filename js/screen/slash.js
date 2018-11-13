@@ -1,5 +1,5 @@
 var slashScreen = function() {}
-var textArray = ["ЛЁХА И ЗЕМЛЯТРЯСУ4КА",
+var textArray = ["БРАВЫЙ ГРУЗЧИК ЛЁХА",
         "идёт землятресение!",
         "только бравый грузчик Лёха",
         "может спасти Лидер от убытков",
@@ -13,7 +13,7 @@ var actionOnClick = function() {
         alpha: 0
         }, 500, Phaser.Easing.Linear.None, true);
             tw.onComplete.add(function() {
-                game.state.start('PlayGame', false, false);
+                game.state.start('PlayGame', true, true);
             });
 }
 slashScreen.prototype = {
@@ -29,13 +29,13 @@ slashScreen.prototype = {
         
         this.tt = 10;
         this.idx = 0;
-        game.stage.backgroundColor = '#FFFFFF';
+        game.stage.backgroundColor = bg_color;
 
         this.timerT = game.add.text(game.world.width/2,game.world.height-50,
             'ДО НАЧАЛА : '+ this.tt,
         {
             font: '12px "Press Start 2P"',
-            fill: '#F04E28',
+            fill: text_color,
             stroke: '#000000',
             strokeThickness: 3,
             align: 'center'
@@ -52,7 +52,8 @@ slashScreen.prototype = {
         alpha: 0
         }, 500, Phaser.Easing.Linear.None, true);
             tw.onComplete.add(function() {
-                button = game.add.button(game.world.centerX - 48, game.world.height - 50 - 12, 'button', actionOnClick, this, 2, 1, 0);
+                button = game.add.button(game.world.centerX , game.world.height - 50 - 12, 'button', actionOnClick, this, 2, 1, 0);
+                button.anchor.setTo(0.5);
                 button.scale.setTo(1.5);
             });
         }
@@ -62,13 +63,14 @@ slashScreen.prototype = {
         if(this.idx<textArray.length) {
             var line = game.add.text(game.world.width/2, 64 + this.idx * 22, textArray[this.idx],  {
             font: '18px "Press Start 2P"',
-            fill: '#F04EFF',
+            fill: text_color,
             stroke: '#000000',
             strokeThickness: 3,
             align: 'center'
         });
             line.anchor.setTo(0.5);
             line.alpha = 0.1;
+            this.textLogo.push(line);
             game.add.tween(line).to({
         alpha: 1
         }, 1500, Phaser.Easing.Linear.None, true);
