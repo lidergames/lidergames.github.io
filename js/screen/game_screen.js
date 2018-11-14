@@ -106,7 +106,9 @@ playGame.prototype = {
             var sp;
             var i = game.rnd.integerInRange(1, 3);
             var xRandom = game.rnd.integerInRange(30, 550);
-            var yRandom = game.rnd.integerInRange(-60,-650);
+            var y_min = -130 + this.cocombo_max * 4;
+            var y_max = -600 + this.cocombo_max * 13.5;
+            var yRandom = game.rnd.integerInRange(-130,-650);
             if(i == 1) {
                 sp = this.stage.create(xRandom, yRandom, "TEX");
             } else if(i == 2) {
@@ -139,11 +141,11 @@ playGame.prototype = {
     },
     moveLeha: function() {
         if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) || 
-            game.input.mousePointer.isDown && game.input.x>game.world.centerX) {
+             game.input.activePointer.isDown && game.input.x>game.world.centerX) {
             this.leha.body.velocity.x = gameOptions.playerSpeed*gameOptions.obfuscation;
     }
         if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT) || 
-            game.input.mousePointer.isDown && game.input.x<game.world.centerX) {
+             game.input.activePointer.isDown && game.input.x<game.world.centerX) {
             this.leha.body.velocity.x = (-gameOptions.playerSpeed)*gameOptions.obfuscation;
     }
     },
@@ -256,13 +258,12 @@ playGame.prototype = {
     cocomboUpdate: function() {
         if((this.cocombo[0] % this.cocombo[1]) == 0 ) {
             var result = (this.cocombo[0] / this.cocombo[1])
-            console.info(result);
             if(this.cocombo_max<result) {
                 this.cocombo_max = result;
                 gameOptions.playerSpeed +=25;
             }
 
-            var idx = result < 11 ? result : 10;
+            var idx = result < 30 ? result : 29;
             var txt = createText(this.cocombo_text[idx],
                 game.world.width / 2,
                 288 / 2,
