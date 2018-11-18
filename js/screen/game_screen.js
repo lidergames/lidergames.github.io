@@ -13,6 +13,7 @@ var gameOptions = {
 }
 var time=0;
 var score = 0;
+var globalStage;
 playGame.prototype = {
     preload: function(){
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -40,7 +41,7 @@ playGame.prototype = {
         this.currentTime = 0;
         this.stage0 = game.add.group(); // BG 
         this.stage = game.add.group(); // Леха и объекты 
-
+        globalStage = this.stage;
 	
 	   this.bg = this.stage0.create(0,0,"bg");
 	   this.bg1 = this.stage0.create(288,0,"bg");
@@ -122,6 +123,7 @@ playGame.prototype = {
             sp.body.gravity.y = game.rnd.integerInRange(200, 550);
             //sp.body.collideWorldBounds = true;
             sp.body.setSize(25,25,34,71);
+            sp.anchor.y = 1;
             //console.info(sp.body.y);
             this.sps.push(sp);
             this.stage.sort('indexOnLayer',Phaser.Group.SORT_ASCENDING);
@@ -202,15 +204,21 @@ playGame.prototype = {
         this.cocombo[0] = 0;
         this.moneyText.setText("зарплата : "+ this.money);
         this.t = createText('-250р',150,30,10);
-        sprite.destroy(true);
+        sprite.body.destroy(true);
 
         game.add.tween(this.t).to( { y: 60 }, 1000, Phaser.Easing.Bounce.Out, true);
+        var scTween = game.add.tween(sprite.scale).to ( { x : 1.5, y : 0.5 }, 100,Phaser.Easing.Bounce.Out,true );
+        scTween.onComplete.add(function() {
+            createParticles(sprite.x,sprite.y,10,globalStage);
+            sprite.destroy(true);
+        });
         var tw = game.add.tween(this.t).to({
         alpha: 0
     }, 1000, Phaser.Easing.Linear.None, true);
         tw.onComplete.add(function() {
         this.t.destroy(true);
 }, this);
+        
     },
 	render: function() {
 		//this.debug();
@@ -270,7 +278,7 @@ playGame.prototype = {
                 25);
             txt.anchor.setTo(0.5);
             txt.angle = rnd(0,1) == 1 ?  35 : -35;
-            //game.add.tween(txt).to( { scale: 2 }, 1000, Phaser.Easing.Bounce.Out, true);
+            game.add.tween(txt).to( { angle : 360 }, 500, Phaser.Easing.Bounce.Out, true);
             game.add.tween(txt).to({
         alpha: 0
     }, 1000, Phaser.Easing.Linear.None, true).onComplete.add(function() {
@@ -307,14 +315,29 @@ function createTextAndTween(text,from_x,from_y,to_x,to_y,size,time) {
     return txt;
 }
 var particles = [];
-function createParticle(x,y,count) {
+function createParticles(x,y,count,stage) {
     for (var i = 0; i<count ; i++) {
-        var xVel = rnd(-1,1);
+        var xVel = rnd(-11,11) / 10;
         var yVel = rnd(2,1);
+        var particleSpeed = 50;
+        var scaleParticle = rnd(1,3) / 10;
 
-        var particle = this.stage.create(x, y, "block");
-        particle.xVelocity = xVel;
-        particle.yVelocity = yVel;
+        var particle = stage.create(x, y, "block");
+        particle.anchor.setTo(0.5);
+        particle.scale.setTo(scaleParticle);
+        game.physics.enable(particle,Phaser.Physics.ARCADE);
+        particle.body.gravity.y = 400;
+        particle.body.velocity.x = xVel*particleSpeed;
+        particle.body.velocity.y = yVel*-particleSpeed*2;
+        particle.life = rnd(200,500);
         particles.push(particle);
+    }
+}
+function updateParticles() {
+    for (var i = 0; i<particles.length-1 ; i++) {
+        particles[i].life -=1;
+        if(particles[i].life<=0) {
+            particles[i].destroy(true);
+        }
     }
 }
