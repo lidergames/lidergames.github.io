@@ -58,7 +58,7 @@ playGame.prototype = {
 	   this.leha.body.setSize(75,20,12,75);//ВАЖНО
         this.leha.body.gravity.y = gameOptions.playerGravity;
         //this.leha.body.collideWorldBounds = true;
-        this.leha.body.bounce.setTo(0.2, 0.2);
+        this.leha.body.bounce.setTo(0.1, 0.2);
         this.leha.body.collideWorldBounds = true;
 
         game.time.events.loop(Phaser.Timer.SECOND, this.tick,this);
@@ -90,7 +90,21 @@ playGame.prototype = {
             'божественно!',
             'нет слов!',
             'заканчивай игру!',
-            'це фантастично!'
+            'це фантастично!',
+            'вот это да',
+            'Жи есть!',
+            'не возможно',
+            'упрямый!',
+            'это нечто!',
+            'могуществен!',
+            'Ты знаешь создателя?',
+            'Курва!',
+            'божественно!',
+            'нет слов!',
+            'не возможно',
+            'упрямый!',
+            'это нечто!',
+            'могуществен!',//25
         ];
         this.cocombo_max = 0;
     },
@@ -106,7 +120,15 @@ playGame.prototype = {
             time = 0;
             var sp;
             var i = game.rnd.integerInRange(1, 3);
-            var xRandom = game.rnd.integerInRange(30, 550);
+
+            var coff = 60 + this.cocombo_max*30;
+            var x_min = game.world.centerX - coff;
+            var x_max = game.world.centerX + coff;
+            x_min = x_min<30 ? 30 : x_min;
+            x_max = x_max> 550 ? 550 : x_max;
+            var xRandom = game.rnd.integerInRange(x_min, x_max);
+
+
             var y_min = -130 + this.cocombo_max * 4;
             var y_max = -600 + this.cocombo_max * 13.5;
             var yRandom = game.rnd.integerInRange(-130,-650);
@@ -137,6 +159,7 @@ playGame.prototype = {
             tw1.onComplete.add(function() {
                 triangleSprite.destroy(true);
             });
+
             
         }
         
@@ -151,7 +174,7 @@ playGame.prototype = {
             this.leha.body.velocity.x = (-gameOptions.playerSpeed)*gameOptions.obfuscation;
     }
     },
-    update:function(){
+    update: function(){
         this.leha.body.velocity.x *=0.98;
 	if(this.leha.body.velocity.x<5 && this.leha.body.velocity.x>-5 ) {
 		//console.info(this.leha.body.velocity.x);
@@ -194,9 +217,9 @@ playGame.prototype = {
         this.cocomboUpdate();
         createTextAndTween("x"+this.cocombo[0],
             sprite.x,
-            sprite.y,
+            sprite.y-10,
             sprite.x,
-            sprite.y-25,
+            sprite.y-35,
             15,700).angle = 35;
     },
     collisionHandlerGround : function(obj1,sprite) {
@@ -262,6 +285,18 @@ playGame.prototype = {
             align: 'center'
         });
         this.timeText.anchor.setTo(0.5);
+
+        this.cocomboText = game.add.text(game.world.width,5,
+                    'комбо : 0',
+                {
+                    font: '12px "Press Start 2P"',
+                    fill: text_color,
+                    stroke: '#000000',
+                    strokeThickness: 3,
+                    align: 'center'
+                });
+        
+        this.cocomboText.anchor.x = 1;
     },
     cocomboUpdate: function() {
         if((this.cocombo[0] % this.cocombo[1]) == 0 ) {
@@ -269,6 +304,7 @@ playGame.prototype = {
             if(this.cocombo_max<result) {
                 this.cocombo_max = result;
                 gameOptions.playerSpeed +=25;
+                this.cocomboText.setText('комбо : '+ this.cocombo_max);
             }
 
             var idx = result < 30 ? result : 29;
@@ -278,10 +314,12 @@ playGame.prototype = {
                 25);
             txt.anchor.setTo(0.5);
             txt.angle = rnd(0,1) == 1 ?  35 : -35;
-            game.add.tween(txt).to( { angle : 360 }, 500, Phaser.Easing.Bounce.Out, true);
+            txt.scale.setTo(2);
+            game.add.tween(txt).to( { angle : 360+txt.angle }, 400, Phaser.Easing.Bounce.Out, true);
+            game.add.tween(txt.scale).to({ x:1, y:1 },400,Phaser.Easing.Bounce.Out, true);
             game.add.tween(txt).to({
         alpha: 0
-    }, 1000, Phaser.Easing.Linear.None, true).onComplete.add(function() {
+    }, 1300, Phaser.Easing.Linear.None, true).onComplete.add(function() {
         txt.destroy(true);
         }, this);
         }
