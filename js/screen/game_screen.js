@@ -14,6 +14,7 @@ var gameOptions = {
 var time=0;
 var score = 0;
 var globalStage;
+var cocomboText;
 playGame.prototype = {
     preload: function(){
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -104,7 +105,10 @@ playGame.prototype = {
             'не возможно',
             'упрямый!',
             'это нечто!',
-            'могуществен!',//25
+            'могуществен!',
+            'теку',
+            'пщщщщщщ',
+            'осталось 2 комбо','ещё 1','Это финал!'//30
         ];
         this.cocombo_max = 0;
     },
@@ -112,7 +116,7 @@ playGame.prototype = {
         game.camera.shake(0.005, 500);
         this.currentTime ++;
         score = this.currentTime;
-        this.timeText.setText('общее время : '+ this.currentTime);
+        this.timeText.setText('время игры : '+ this.currentTime);
     },
     my_timer: function() {
         time++;
@@ -121,7 +125,7 @@ playGame.prototype = {
             var sp;
             var i = game.rnd.integerInRange(1, 3);
 
-            var coff = 60 + this.cocombo_max*30;
+            var coff = 120 + this.cocombo_max*30;
             var x_min = game.world.centerX - coff;
             var x_max = game.world.centerX + coff;
             x_min = x_min<30 ? 30 : x_min;
@@ -220,13 +224,13 @@ playGame.prototype = {
             sprite.y-10,
             sprite.x,
             sprite.y-35,
-            15,700).angle = 35;
+            15,700,'#FF0000', function() {}).angle = 35;
     },
     collisionHandlerGround : function(obj1,sprite) {
         this.money -=250;
         this.cocombo[0] = 0;
         this.moneyText.setText("зарплата : "+ this.money);
-        this.t = createText('-250р',150,30,10);
+        this.t = createText('-250р',150,30,10,'#FF0000');
         sprite.body.destroy(true);
 
         game.add.tween(this.t).to( { y: 60 }, 1000, Phaser.Easing.Bounce.Out, true);
@@ -256,7 +260,7 @@ playGame.prototype = {
     },
     createUIText: function() {
         this.score = 0;
-        this.scoreText = game.add.text(5,5,
+        this.scoreText = game.add.text(game.world.width/2,35,
             'спасено : '+ this.score,
         {
             font: '12px "Press Start 2P"',
@@ -265,7 +269,9 @@ playGame.prototype = {
             strokeThickness: 3,
             align: 'center'
         });
-        this.moneyText = game.add.text(5,30,
+        this.scoreText.anchor.x=0.5;
+        this.scoreText.anchor.y=0.5;
+        this.moneyText = game.add.text(5,20,
             'зарплата : '+ this.money,
         {
             font: '12px "Press Start 2P"',
@@ -274,9 +280,10 @@ playGame.prototype = {
             strokeThickness: 3,
             align: 'center'
         });
-
+        this.moneyText.anchor.x=0;
+        this.moneyText.anchor.y=0.5;
         this.timeText = game.add.text(game.world.width/2,20,
-            'общее время : '+ this.currentTime,
+            'время игры : '+ this.currentTime,
         {
             font: '12px "Press Start 2P"',
             fill: text_color,
@@ -286,8 +293,8 @@ playGame.prototype = {
         });
         this.timeText.anchor.setTo(0.5);
 
-        this.cocomboText = game.add.text(game.world.width,5,
-                    'комбо : 0',
+        cocomboText = game.add.text(game.world.width-5,20,
+                    'премия : 0',
                 {
                     font: '12px "Press Start 2P"',
                     fill: text_color,
@@ -296,7 +303,8 @@ playGame.prototype = {
                     align: 'center'
                 });
         
-        this.cocomboText.anchor.x = 1;
+        cocomboText.anchor.x = 1;
+        cocomboText.anchor.y = 0.5;
     },
     cocomboUpdate: function() {
         if((this.cocombo[0] % this.cocombo[1]) == 0 ) {
@@ -304,14 +312,20 @@ playGame.prototype = {
             if(this.cocombo_max<result) {
                 this.cocombo_max = result;
                 gameOptions.playerSpeed +=25;
-                this.cocomboText.setText('комбо : '+ this.cocombo_max);
+                var text_premiya = createTextAndTween('+'+100+'р.',
+                game.world.width-50,25,
+                game.world.width-50,5,
+                12,
+                1000,'#08dd08',function() {
+                    cocomboText.setText('премия : '+result*100+'р.')
+                });
             }
 
             var idx = result < 30 ? result : 29;
             var txt = createText(this.cocombo_text[idx],
                 game.world.width / 2,
                 288 / 2,
-                25);
+                25,'#FF0000');
             txt.anchor.setTo(0.5);
             txt.angle = rnd(0,1) == 1 ?  35 : -35;
             txt.scale.setTo(2);
@@ -330,24 +344,25 @@ var text;
 function rnd(min,max) {
     return  game.rnd.integerInRange(min, max);
 }
-function createText(text,x,y,size) {
+function createText(text,x,y,size,color) {
     return game.add.text(x,y,
             text,
         {
             font: size+'px "Press Start 2P"',
-            fill: '#FF0000',
+            fill: color,
             stroke: '#000000',
             strokeThickness: 3,
             align: 'center'
         });
 
 }
-function createTextAndTween(text,from_x,from_y,to_x,to_y,size,time) {
-    var txt = createText(text,from_x,from_y,size);
+function createTextAndTween(text,from_x,from_y,to_x,to_y,size,time,color,onComplete1) {
+    var txt = createText(text,from_x,from_y,size,color);
     game.add.tween(txt).to( { y: to_y }, time, Phaser.Easing.Bounce.Out, true);
     var tw = game.add.tween(txt).to({ alpha: 0 },
             time, Phaser.Easing.Linear.None, true);
     tw.onComplete.add(function() {
+        onComplete1();
         txt.destroy(true);
     }, this);
     return txt;

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="has-navbar-fixed-top">
+<head>
+  <meta charset="UTF-8" />
+ 
+  <title>LiderGames</title>
+ 
+  <style>* {
+   padding: 0; margin: 0;   }
+   #gameAlex { 
+    width: 70%; /* Ширина */
+    height: 70%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+
+ </style>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+  <!-- Game Engine -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <!-- версия для разработки, отображает полезные предупреждения в консоли -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="js/phaser.min.js"></script>
+  <script src="js/screen/slash.js"></script>
+  <script src="js/screen/game_screen.js"></script>
+  <script src="js/screen/game_over.js"></script>
+  <script src="game.js"></script>
+</head>
+<body>
+ 
+    <div class="container is-fullhd" id="my_view" :style="{ backgroundColor: `hsl(${x}, 80%, 50%)` }" @mousemove="xCoordinate">
+      <nav class="navbar is-fixed-top is-link" role="navigation" aria-label="main navigation">
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="#" @click ="showGameAlex = false">
+        Главная
+      </a>
+      <div class="buttons">
+        <a class="button is-primary" @click ="showGameAlexInit">
+            <strong>Бравый грузчик </strong>
+          </a>
+      </div>        
+      </div>
+    </div>
+    <div class="navbar-end"></div>
+  </div>
+</nav>
+    </div>
+    
+    <modal id="gameAlex" title="Title of the modal" @close="showGameAlex = false" v-show="showGameAlex">
+      <div id="gameView" class="content" >
+        
+      </div>
+      <div class="liderboard" v-show="showGameAlex">
+        
+      </div>
+    </modal>
+
+
+ <script>
+  var vueJS = new Vue({
+    el: '#my_view',
+    data: {
+    name : 'Unnamed',
+    x:2,
+    showGameAlex: false
+    },
+    methods: {
+      xCoordinate: function(event) {
+      this.x = event.clientX;
+      },
+      showGameAlexInit: function() {
+        WebFont.load({
+        google: {
+            families: ['Press+Start+2P']
+        },
+        active: function() {
+          console.info(name_player);
+          if(this.name!='Unnamed') {
+            GameInitialize();
+          }
+          else {
+            var new_name = prompt('Придумай псевдоним');
+            if(new_name == null) {
+              alert('Нельзя играть без псевдонима');
+              this.name = prompt('Придумай псевдоним ;)');
+            }
+            else {
+              this.name= new_name;
+            }
+            GameInitialize();
+          }
+    }
+  }
+    );
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

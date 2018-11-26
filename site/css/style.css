@@ -1,0 +1,18 @@
+nav {
+    background: #005f96;
+}
+footer.page-footer {
+    background-color: #14268b; 
+}
+div#footer-copiryght{
+    width: 100%;
+    background: #2c3061;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main {
+    flex: 1 0 auto;
+}

@@ -1,26 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="has-navbar-fixed-top">
-<head>
-  <meta charset="UTF-8" />
- 
-  <title>LiderGames</title>
- 
-  <style>* {
-   padding: 0; margin: 0;   }
-   #gameAlex { 
-    width: 70%; /* Ширина */
-    height: 70%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%)
-  }
+<html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css"  media="screen,projection"/>
+    <link rel="stylesheet" href="site/css/style.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
 
- </style>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-
-  <!-- Game Engine -->
+  <body>
+      <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
+    
+    <!-- Game Engine -->
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
   <!-- версия для разработки, отображает полезные предупреждения в консоли -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -29,39 +24,90 @@
   <script src="js/screen/game_screen.js"></script>
   <script src="js/screen/game_over.js"></script>
   <script src="game.js"></script>
-</head>
-<body>
- 
-    <div class="container is-fullhd" id="my_view" :style="{ backgroundColor: `hsl(${x}, 80%, 50%)` }" @mousemove="xCoordinate">
-      <nav class="navbar is-fixed-top is-link" role="navigation" aria-label="main navigation">
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-      <a class="navbar-item" href="#" @click ="showGameAlex = false">
-        Главная
-      </a>
-      <div class="buttons">
-        <a class="button is-primary" @click ="showGameAlexInit">
-            <strong>Бравый грузчик </strong>
-          </a>
-      </div>        
-      </div>
-    </div>
-    <div class="navbar-end"></div>
-  </div>
-</nav>
-    </div>
     
-    <modal id="gameAlex" title="Title of the modal" @close="showGameAlex = false" v-show="showGameAlex">
-      <div id="gameView" class="content" >
+    <header>
+        <nav>
+                <div class="container">
+                <div class="nav-wrapper">
+                    <a href="#" class="brand-logo">Мини <img src="site/img/icon.png" width="30" height="30" alt="icon"> Игры</a>
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="#">О нас</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
         
-      </div>
-      <div class="liderboard" v-show="showGameAlex">
+        <ul class="sidenav" id="mobile-demo">
+                <li><a href="#">О нас</a></li>
+              </ul>
+            
+    </header>
+    
+    <main id="my_view">
+            <div class="container">
+                <div class="row">
+                 <div class="col xl2 l4 m6 s12">
+                        <div class="card">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                  <img class="activator" src="site/img/alex_logo.png">
+                                </div>
+                                <div class="card-content">
+                                  <span class="card-title activator grey-text text-darken-4">Лёха и землятресение<i class="material-icons right">more_vert</i></span>
+                                  <p><a class="modal-trigger" href="#modal1" @click ="showGameAlexInit">Играть</a></p>
+                                </div>
+                                <div class="card-reveal">
+                                  <span class="card-title grey-text text-darken-4">О игре<i class="material-icons right">close</i></span>
+                                  <p>Игра была сделана по фану, все имена и места являются выдуманными ;) любое совпадение случайно.</p>
+                                  <p>Целью игры является, как можно дольше продержаться.</p>
+                                </div>
+                              </div>
+                 </div>   
+                </div>
+            </div>
+    </main>
+   
+    <div id="modal1" class="modal">
+        <div class="modal-content" v-show="showGameAlex">
+            <h4>Лёхе привет)</h4>
+
+            <div id="gameView">
+                
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">
+                закрыть
+            </a>
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        <!-- <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+
+                </div>
+            </div>
+        </div>-->
+        <div class="footer-copyright">
+            <div class="container"> © 2018 GoodBoy </div>
+        </div>
         
-      </div>
-    </modal>
+    </footer>
+    <script>
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+            $('.modal').modal({
+            dismissible: false,
+            inDuration: 1000,
+            startingTop:'70%',
+            endingTop:'4%'
+            });
+  });
 
-
- <script>
   var vueJS = new Vue({
     el: '#my_view',
     data: {
@@ -80,27 +126,13 @@
         },
         active: function() {
           console.info(name_player);
-          if(this.name!='Unnamed') {
-            GameInitialize();
-          }
-          else {
-            var new_name = prompt('Придумай псевдоним');
-            if(new_name == null) {
-              alert('Нельзя играть без псевдонима');
-              this.name = prompt('Придумай псевдоним ;)');
-            }
-            else {
-              this.name= new_name;
-            }
-            GameInitialize();
-          }
+            GameInitialize(); 
     }
   }
     );
       }
     }
   });
-</script>
-
-</body>
+    </script>
+  </body>
 </html>

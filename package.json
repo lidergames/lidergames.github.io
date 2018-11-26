@@ -1,0 +1,23 @@
+{
+  "name": "lidergames.github.io",
+  "version": "1.0.0",
+  "description": "Hello :)",
+  "main": "index.html",
+  "dependencies": {
+    "materialize-css": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lidergames/lidergames.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lidergames/lidergames.github.io/issues"
+  },
+  "homepage": "https://github.com/lidergames/lidergames.github.io#readme"
+}
