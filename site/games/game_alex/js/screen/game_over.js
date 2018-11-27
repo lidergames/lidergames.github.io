@@ -1,7 +1,7 @@
 gameOver = function() { };
 gameOver.prototype = {
 	preload: function() {
-		game.load.spritesheet('button','img/button.png',96,24);
+		game.load.spritesheet('button','game_alex-img/button.png',96,24);
 	},
 	create: function() {
 		game.stage.backgroundColor = bg_color;
