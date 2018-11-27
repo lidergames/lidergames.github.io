@@ -20,13 +20,13 @@ playGame.prototype = {
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
-        game.load.image("block", "game_alex-img/block.png");
-        game.load.spritesheet('leha','game_alex-img/sprite.png',96,96)
-	    game.load.image("bg","game_alex-img/BG.png");
-        game.load.image("CERESIT","game_alex-img/CERESIT.png");
-        game.load.image("TEX","game_alex-img/TEX.png");
-        game.load.image("FUGEN","game_alex-img/FUGEN.png");
-        game.load.image("triangle",'game_alex-img/triangle.png');
+        game.load.image("block", "game-alex-img/block.png");
+        game.load.spritesheet('leha','game-alex-img/sprite.png',96,96)
+	    game.load.image("bg","game-alex-img/BG.png");
+        game.load.image("CERESIT","game-alex-img/CERESIT.png");
+        game.load.image("TEX","game-alex-img/TEX.png");
+        game.load.image("FUGEN","game-alex-img/FUGEN.png");
+        game.load.image("triangle",'game-alex-img/triangle.png');
     },
     destroyAll: function() {
         this.stage.visible = false;
