@@ -62,7 +62,7 @@
             
     </header>
     
-    <main id="my_view">
+    <main>
             <div class="container">
                 <div class="row">
                  <div class="col xl6 l6 m6 s12">
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="card-content">
                                   <span class="card-title activator grey-text text-darken-4">Лёха и землятресение<i class="material-icons right">more_vert</i></span>
-                                  <p><a class="modal-trigger" href="#modal1" @click ="showGameAlexInit">Играть</a></p>
+                                  <p><a href="site/page/game_alex.html">Играть</a></p>
                                 </div>
                                 <div class="card-reveal">
                                   <span class="card-title grey-text text-darken-4">О игре<i class="material-icons right">close</i></span>
@@ -84,23 +84,6 @@
                 </div>
             </div>
     </main>
-   
-    <div id="modal1" class="modal">
-        <div class="modal-content" v-show="showGameAlex">
-            <h4>Лёхе привет)</h4>
-
-            <div id="gameView">
-                
-            </div>
-
-        </div>
-
-        <div class="modal-footer">
-            <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">
-                закрыть
-            </a>
-        </div>
-    </div>
 
     <footer class="page-footer">
         <!-- <div class="container">
@@ -118,38 +101,6 @@
     <script>
         $(document).ready(function(){
             $('.sidenav').sidenav();
-            $('.modal').modal({
-            dismissible: false,
-            inDuration: 1000,
-            startingTop:'70%',
-            endingTop:'4%'
-            });
-  });
-
-  var vueJS = new Vue({
-    el: '#my_view',
-    data: {
-    name : 'Unnamed',
-    x:2,
-    showGameAlex: false
-    },
-    methods: {
-      xCoordinate: function(event) {
-      this.x = event.clientX;
-      },
-      showGameAlexInit: function() {
-        WebFont.load({
-        google: {
-            families: ['Press+Start+2P']
-        },
-        active: function() {
-          console.info(name_player);
-            GameInitialize(); 
-    }
-  }
-    );
-      }
-    }
   });
     </script>
   </body>
