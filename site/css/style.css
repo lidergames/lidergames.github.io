@@ -18,5 +18,8 @@ main {
 }
 main#my_view {
     background-color: #3b5998;
+    width: 100%;
+}
+#gameView {
     width: 95%;
 }
