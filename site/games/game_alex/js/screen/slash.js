@@ -21,7 +21,7 @@ slashScreen.prototype = {
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
-        game.load.spritesheet('button','/games/game_alex/img/button.png',96,24);
+        game.load.spritesheet('button','games/game_alex/img/button.png',96,24);
      },
 
     create: function() {
