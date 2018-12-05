@@ -38,3 +38,8 @@ div.card-link {
 .h13px {
     font-size: 13px;
 }
+.collection {
+background-color: transparent;
+height: 30%;
+overflow-y: scroll;
+}

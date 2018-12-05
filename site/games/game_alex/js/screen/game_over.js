@@ -24,7 +24,11 @@ gameOver.prototype = {
 
 		this.repeat_button = game.add.button(game.world.centerX, game.world.height - 25, 'button', actionOnClick, this, 2, 1, 0);
         this.repeat_button.anchor.setTo(0.5);
-        this.repeat_button.scale.setTo(2);
+		this.repeat_button.scale.setTo(2);
+		dreamloSDK.pushScore(name_player,countObjects,score);
+		if(dreamloSDK.isNewRecord(score)) {
+			alert('Поздравляем вы поставили новый рекорд!');
+		}
 	},
 	update: function() {},
 	text: function(text,x,y,size) {

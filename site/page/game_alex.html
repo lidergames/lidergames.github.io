@@ -47,7 +47,7 @@
         <nav>
                 <div class="container">
                 <div class="nav-wrapper">
-                    <a href="../index.html" class="brand-logo">Мини <img src="../img/icon.png" width="30" height="30" alt="icon"> Игры</a>
+                    <a href="../../index.html" class="brand-logo">Мини <img src="../img/icon.png" width="30" height="30" alt="icon"> Игры</a>
                     <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     <ul class="right hide-on-med-and-down">
                         <li><a href="#">О нас</a></li>
@@ -73,28 +73,28 @@
                 </div>
             </div>
             <div class="container">
+                    <ul class="collection with-header">
+                            <li class="collection-header transparent"><h6 class="press2play">Таблица рекордов</h6></li>
+                            <li class="collection-item transparent">
                 <table class="striped centered">
                     <thead>
-                        <tr>
+                        <tr class="press2play">
                             <th>Имя</th>
-                            <th>Спасено смесей</th>
                             <th>Время игры</th>
+                            <th>Спасено смесей</th>
                         </tr>
                     </thead>
-                    <tbody class="leaderboard_tbody">
+                    <tbody class="leaderboard_tbody press2play">
                     </tbody>
                 </table>
+                            </li>
+                    </ul>
             </div>
+
     </main>
    
     <footer class="page-footer">
-        <!-- <div class="container">
-            <div class="row">
-                <div class="col l6 s12">
-
-                </div>
-            </div>
-        </div>-->
+       
         <div class="footer-copyright">
             <div class="container"> © 2018 GoodBoy </div>
         </div>
@@ -103,16 +103,27 @@
     <script>
         $(document).ready(function(){
             $('.sidenav').sidenav();});
+        let nicks
+        while (true) {
+            var name = prompt('Введите псевдоним','')
+            if(name != '' ) {
+                name_player = name;
+                return
+        }
+        }
+        
+        
         
         dreamloSDK.init();
         var lea = dreamloSDK.getLB();
-        console.info(lea[0]);
         for (let i = 0; i < lea.length; i++) {
-            
+            const user = lea[i];
+            $('<tr><td>'+user.name+'</td>'+'<td>'+user.score+'</td>'+'<td>'+user.seconds+'</td></tr>').appendTo('.leaderboard_tbody');
+   
         }
-        const user = lea[0];
-            //$('<td>'+user.name+'</td>'+'<td>'+user.score+'</td>'+'<td>'+user.seconds+'</td>').appendTo('.leaderboard_tbody');
-  
+
+ 
+        
         WebFont.load({
         google: {
             families: ['Press+Start+2P']

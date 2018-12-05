@@ -13,6 +13,7 @@ var gameOptions = {
 }
 var time=0;
 var score = 0;
+var countObjects = 0;
 var globalStage;
 var cocomboText;
 playGame.prototype = {
@@ -218,6 +219,7 @@ playGame.prototype = {
         //console.info("collide");
         sprite.destroy(true);
         this.scoreText.setText('спасено : '+ this.score);
+        countObjects = this.score;
         this.cocombo[0] +=1;
         this.cocomboUpdate();
         createTextAndTween("x"+this.cocombo[0],
