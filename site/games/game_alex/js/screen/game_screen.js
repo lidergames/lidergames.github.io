@@ -22,7 +22,8 @@ playGame.prototype = {
         game.scale.pageAlignVertically = true;
         game.load.image("block", "game-alex-img/block.png");
         game.load.spritesheet('leha','game-alex-img/sprite.png',96,96)
-	    game.load.image("bg","game-alex-img/BG.png");
+	    game.load.image("bg","game-alex-img/BG1.png");
+	    game.load.image("bg1","game-alex-img/BG.png");
         game.load.image("CERESIT","game-alex-img/CERESIT.png");
         game.load.image("TEX","game-alex-img/TEX.png");
         game.load.image("FUGEN","game-alex-img/FUGEN.png");
@@ -38,14 +39,14 @@ playGame.prototype = {
     },
     create: function(){
         this.sps = [];
-        this.money = 9000;
+        this.money = 7000;
         this.currentTime = 0;
         this.stage0 = game.add.group(); // BG 
         this.stage = game.add.group(); // Леха и объекты 
         globalStage = this.stage;
 	
 	   this.bg = this.stage0.create(0,0,"bg");
-	   this.bg1 = this.stage0.create(288,0,"bg");
+	   this.bg1 = this.stage0.create(288,0,"bg1");
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
         this.leha = this.stage.create(150,150,'leha');

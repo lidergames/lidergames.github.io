@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 nav {
     background: #005f96;
 }
@@ -23,4 +24,17 @@ main#my_view {
 div#gameView {
     width: 95%;
     height: 120%;
+}
+img.resize-image {
+    width: 60%;
+    height: 60%;
+}
+div.card-link {
+    margin-bottom: -20%;
+}
+.press2play {
+    font-family: 'Press Start 2p';
+}
+.h13px {
+    font-size: 13px;
 }

@@ -32,7 +32,9 @@
       <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../node_modules/materialize-css/dist/js/materialize.min.js"></script>
-    
+    <script type="text/javascript" src="../games/game_alex/js/screen/dreamlosdk.js"></script>
+
+
     <!-- Game Engine -->
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
   <script src="../games/game_alex/js/phaser.min.js"></script>
@@ -70,6 +72,19 @@
                         </div>
                 </div>
             </div>
+            <div class="container">
+                <table class="striped centered">
+                    <thead>
+                        <tr>
+                            <th>Имя</th>
+                            <th>Спасено смесей</th>
+                            <th>Время игры</th>
+                        </tr>
+                    </thead>
+                    <tbody class="leaderboard_tbody">
+                    </tbody>
+                </table>
+            </div>
     </main>
    
     <footer class="page-footer">
@@ -88,7 +103,16 @@
     <script>
         $(document).ready(function(){
             $('.sidenav').sidenav();});
-
+        
+        dreamloSDK.init();
+        var lea = dreamloSDK.getLB();
+        console.info(lea[0]);
+        for (let i = 0; i < lea.length; i++) {
+            
+        }
+        const user = lea[0];
+            //$('<td>'+user.name+'</td>'+'<td>'+user.score+'</td>'+'<td>'+user.seconds+'</td>').appendTo('.leaderboard_tbody');
+  
         WebFont.load({
         google: {
             families: ['Press+Start+2P']
