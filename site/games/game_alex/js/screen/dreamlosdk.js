@@ -3,8 +3,9 @@ var dreamloSDK = {
 	init : function() {
 		this.privateKey = 'jOkFyRr48k2t8jN8Ao0wKguHC59lL42kmRxvOUEbNdng';
 		this.publicKey = '5bf48cceb6397e00e07d1692';
-		this.xhr = ( window.XMLHttpRequest && "withCredentials" in (new XMLHttpRequest) ) ?
-		new XMLHttpRequest : window.XDomainRequest ? new XDomainRequest : null;
+		this.XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
+
+		this.xhr = new this.XHR();
 	},
 	getLB: function() {
 		var leaders;
