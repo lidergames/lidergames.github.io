@@ -16,7 +16,7 @@ var dreamloSDK = {
 			this.xhr.onerror = function() {
 					alert( "Не удалось сделать запрос" );
 			}
-			this.xhr.send( null );
+			this.xhr.send();
 		} else {
 			alert( "Извините но ваш браузер не поддерживает Кроссдоменные запросы." );
 		}
