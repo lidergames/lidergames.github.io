@@ -24,7 +24,10 @@ first_state.prototype ={
 	update: function() {},
 	render: function() {
 		for (var i = this.cells.length - 1; i >= 0; i--) {
-			game.debug.geom(this.cells[i].shape,'#cfffff');
+			if(this.cells[i] != null) {
+				game.debug.geom(this.cells[i].shape,'#cfffff');
+			}
+			
 		}
 		
 	},
@@ -41,24 +44,54 @@ first_state.prototype ={
 	},
 	deletCellToGrid: function(grid,cell) {
 		delete grid[this.widthGrid*cell.y+cell.x];
-		cell.destroy(true);
+		//cell.kill();
 	},
 	my_timer : function() {
+		console.info('tick');
 		for (var i = this.cells.length - 1; i >= 0; i--) {
-			val cell = this.cells[i];
-			
+			if(this.cells[i] == null) {
+				continue
+			}
+			const cell = this.cells[i];
+			console.info(cell.x);
 			var sosedi = 0;
 			var small_grid=[9];
-
-			if(cell.x-1 >= 0 && cell.y-1 >= 0) {
+			for (let i = 0; i < 9; i++) {
+				small_grid[i]=0;
+				
 			}
 
-			if(cell.y-1>=0) {
-				if (cell.x-1>0) {
-					small_grid[3*0+0]this.getCell(cell.x-1,cell.y-1)
+			for (let x = 0; x < 2; x++) {
+				for (let y = 0; y < 2; y++) {
+					let xn = -1+x;
+					let yn = -1+y;
+					if(cell.x+xn<0 || cell.x+xn>=this.widthGrid) {
+						continue
+					}
+					if(cell.y+yn<0 || cell.y+yn>=this.heightGrid) {
+						continue
+					}
+					if(this.getCell(cell.x+xn,cell.y+yn) != null ) {
+						sosedi++;
+						small_grid[3*yn+xn] = 1;
+					}
+
 				}
 				
 			}
+		if(sosedi>1 || sosedi<1) {
+			this.deletCellToGrid(this.grid,cell);
+			delete this.cells[i];
+		}
+		else if(sosedi==1) {
+			for(let i = 0;i<small_grid.length;i++) {
+				if(small_grid[i]!=1) {
+					let y = i / 3;
+					let x = i-(3*y) ;
+					this.addCellToGrid(this.grid,this.createCell(cell.x+(-1+x),cell.y+(-1+y)));
+				}
+			}
+		}
 		}
 
 	},

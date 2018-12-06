@@ -1,20 +1,89 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Life</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-</head>
-<body>
-	<!-- Game Engine -->
-  	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js" type="text/javascript"></script>
-	<script src="state/FirstState.js" type="text/javascript"></script>
+  <head>
+		<title>Life</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.min.css"  media="screen,projection"/>
+    <link rel="stylesheet" href="../css/style.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-	<div id="main_view"></div>
-	<script type="text/javascript">
+    <link rel="apple-touch-icon" sizes="57x57" href="../img/favico/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../img/favico/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../img/favico/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../img/favico/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../img/favico/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../img/favico/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../img/favico/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../img/favico/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/favico/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="../img/favico/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../img/favico/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favico/favicon-16x16.png">
+    <link rel="manifest" href="../img/favico/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="../img/favico/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  </head>
+
+  <body>
+      <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../node_modules/materialize-css/dist/js/materialize.min.js"></script>
+   <!-- Game Engine -->
+   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js" type="text/javascript"></script>
+   <script src="life/state/FirstState.js" type="text/javascript"></script>
+
+    
+    <header>
+        <nav>
+                <div class="container">
+                <div class="nav-wrapper">
+                    <a href="../../index.html" class="brand-logo">Мини <img src="../img/icon.png" width="30" height="30" alt="icon"> Игры</a>
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="#">О нас</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <ul class="sidenav" id="mobile-demo">
+                <li><a href="#">О нас</a></li>
+              </ul>
+            
+    </header>
+    
+    <main id="my_view">
+            <div class="container">
+                <div class="row">
+                </div>
+                <div class="row">
+                        <div id="gameView" class="col xl12 l12 m12 s12">
+                        
+                        </div>
+                </div>
+            </div>
+    </main>
+   
+    <footer class="page-footer">
+       
+        <div class="footer-copyright">
+            <div class="container"> © 2018 GoodBoy </div>
+        </div>
+        
+    </footer>
+    <script>
+        $(document).ready(function(){
+            $('.sidenav').sidenav();});
+			
 		var game;
 		function initPhaser() {
-			game = new Phaser.Game(800,600,Phaser.AUTO,'main_view');
+			game = new Phaser.Game(800,600,Phaser.AUTO,'gameView');
 			game.state.add('firstState',first_state,true);
 		}
 
@@ -26,6 +95,6 @@
             initPhaser(); 
     }
   });
-	</script>
-</body>
+    </script>
+  </body>
 </html>
