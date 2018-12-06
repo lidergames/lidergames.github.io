@@ -10,7 +10,7 @@ var dreamloSDK = {
 	getLB: function() {
 		var leaders;
 		if ( this.xhr ) {
-			this.xhr.open( "GET", "http://dreamlo.com/lb/5bf48cceb6397e00e07d1692/json", false );
+			this.xhr.open( "GET", "http://dreamlo.com/lb/5bf48cceb6397e00e07d1692/json", true );
 			this.xhr.onload = function() {
 					leaders = JSON.parse(this.responseText).dreamlo.leaderboard.entry;
 			}
