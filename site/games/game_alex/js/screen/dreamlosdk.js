@@ -10,7 +10,7 @@ var dreamloSDK = {
 	getLB: function() {
 		var leaders;
 		if ( this.xhr ) {
-			this.xhr.open( "GET", "//dreamlo.com/lb/5bf48cceb6397e00e07d1692/json", false );
+			this.xhr.open( "GET", "dreamlo.com/lb/5bf48cceb6397e00e07d1692/json", false );
 			this.xhr.onload = function() {
 					leaders = JSON.parse(this.responseText).dreamlo.leaderboard.entry;
 			}
@@ -24,7 +24,7 @@ var dreamloSDK = {
 		return leaders;
 	},
 	pushScore: function(name,countObjects,timeGame) {
-		this.xhr.open('GET','//dreamlo.com/lb/'+this.privateKey+'/add/'+name+'/'+timeGame+'/'+countObjects,false);
+		this.xhr.open('GET','dreamlo.com/lb/'+this.privateKey+'/add/'+name+'/'+timeGame+'/'+countObjects,false);
 		this.xhr.onerror = function() {
 			alert( 'Ошибка ' + this.status );
 		  }
