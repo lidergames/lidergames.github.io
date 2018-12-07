@@ -18,6 +18,7 @@ var globalStage;
 var cocomboText;
 playGame.prototype = {
     preload: function(){
+	    game.renderer.renderSession.roundPixels = true
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
