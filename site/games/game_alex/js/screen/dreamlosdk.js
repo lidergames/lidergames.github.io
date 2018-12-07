@@ -24,7 +24,7 @@ var dreamloSDK = {
 		return leaders;
 	},
 	pushScore: function(name,countObjects,timeGame) {
-		this.xhr.open('GET','http://dreamlo.com/lb/'+this.privateKey+'/add/'+name+'/'+timeGame+'/'+countObjects,true);
+		this.xhr.open('GET','//dreamlo.com/lb/'+this.privateKey+'/add/'+name+'/'+timeGame+'/'+countObjects,true);
 		this.xhr.onerror = function() {
 			alert( 'Ошибка ' + this.status );
 		  }
