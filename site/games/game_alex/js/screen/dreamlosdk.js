@@ -21,7 +21,7 @@ var dreamloSDK = {
 	},
 	getLB: function() {
 		var leaders;
-		this.client.get("dreamlo.com/lb/5bf48cceb6397e00e07d1692/json",function(response) {
+		this.client.get("//dreamlo.com/lb/5bf48cceb6397e00e07d1692/json",function(response) {
 				leaders = JSON.parse(response).dreamlo.leaderboard.entry;
 			});
 		//if ( this.xhr ) {
