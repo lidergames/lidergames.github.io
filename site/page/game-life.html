@@ -33,11 +33,6 @@
       <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../node_modules/materialize-css/dist/js/materialize.min.js"></script>
-   <!-- Game Engine -->
-   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js" type="text/javascript"></script>
-   <script src="life/state/FirstState.js" type="text/javascript"></script>
-
     
     <header>
         <nav>
@@ -64,7 +59,7 @@
                 </div>
                 <div class="row">
                         <div id="gameView" class="col xl12 l12 m12 s12">
-                        
+                        <canvas id="canvas" width="600" height="600"></canvas>
                         </div>
                 </div>
             </div>
@@ -77,24 +72,200 @@
         </div>
         
     </footer>
-    <script>
-        $(document).ready(function(){
-            $('.sidenav').sidenav();});
-			
-		var game;
-		function initPhaser() {
-			game = new Phaser.Game(800,600,Phaser.AUTO,'gameView');
-			game.state.add('firstState',first_state,true);
-		}
+    <script type="text/javascript">
+        var conf = {
+                width: 600,
+                height: 600,
+                cellSize : 1,
+                roundSize : 600,
+                gridWidth : 600,
+                gridHeight : 600
+            }
+        var ctx;
+        var grid = [];
+        function getRnd(min, max)
+        {
+            return Math.random() * (max - min) + min;
+        }
 
-		WebFont.load({
-        google: {
-            families: ['Press+Start+2P']
-        },
-        active: function() {
-            initPhaser(); 
+        function main() {
+
+            ctx = document.getElementById('canvas').getContext('2d');
+            
+            //drawCell(ctx,300,300,50);
+
+            let roundSize = conf.roundSize;
+            let widthGrid = roundSize;
+            let heightGrid = roundSize;
+            
+
+                    for (let x = 0 ; x < widthGrid; x++) {
+                        grid[x] = [];
+                        for (let y = 0; y < heightGrid; y++) {
+                            let veroyatnost = getRnd(0, 20);
+                            //console.info(veroyatnost)
+                            if(veroyatnost > 19) {
+
+                                grid[x][y]=1;   
+                            }
+                            else {
+                                grid[x][y]=0;
+                            }
+                
+                        }
+                    }
+
+                    drawGridCell(ctx,grid);
+            //setInterval(tick(), 500);
+            setTimeout(function tt() {
+                tick();
+                timerId = setTimeout(tt, 100);
+                }, 100);
+        }
+
+        function drawGrid(ctx,conf) {
+            for (let x = 0; x < conf.gridWidth; x++) {
+                ctx.beginPath();
+                ctx.moveTo(x*conf.cellSize, 0);
+                ctx.lineTo(x*conf.cellSize, conf.gridHeight*conf.cellSize);
+                ctx.closePath();
+                ctx.stroke();
+            }
+            for (let y = 0; y < conf.gridHeight; y++) {
+                    ctx.beginPath();
+                ctx.moveTo(0, y*conf.cellSize);
+                ctx.lineTo(conf.gridWidth*conf.cellSize, y*conf.cellSize);
+                ctx.closePath();
+                ctx.stroke();
+                
+        }
+        }
+
+        function drawGridCell(ctx,grid) {
+            for (let i = 0; i < grid.length; i++) {
+                        for (let j = 0; j < grid[i].length; j++) {
+                            if(grid[i][j] == 1 ) {
+                                drawCell(ctx,i*conf.cellSize,j*conf.cellSize,conf.cellSize)
+                            } 
+                        }
+                    }
+        }
+
+        function drawCell(ctx,x,y,size) {
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, 360, 0);
+            ctx.fill();
+        }
+        var t = 0;
+        function tick() {
+            var gridDef = [];
+
+            for (let x = 0 ; x < grid.length; x++) {
+                gridDef[x] = [];
+                for (let y = 0; y < grid[x].length; y++) {
+                    gridDef[x][y]=0;
+                }
+            }
+            //console.info(gridDef.length)
+            //console.info(gridDef[1].length)
+            for (let i = 0; i < grid.length; i++) {
+                for (let j = 0; j < grid[i].length; j++) {
+                    let sosedi = 0;
+                    if(grid[i][j] == 1 ) {
+                        let gridFam = []
+
+                        for (let x = 0; x < 3; x++) {
+                            for (let y = 0; y < 3; y++) {
+                                if(x==1 && y == 1) {
+                                    continue;
+                                }
+                                let idX = -1 + x;
+                                let idY = -1 + y;
+                                if(i+idX < 0 || j + idY < 0) {
+                                    continue;
+                                }
+                                if(i+idX >= conf.gridWidth || j+idY >= conf.gridWidth) {
+                                    continue;
+                                }
+
+                                if(grid[i+idX][j+idY] == 1) {
+                                    sosedi++
+                                } 
+                            }   
+                        }
+
+                        if(sosedi==2 ||  sosedi==3) {
+                            gridDef[i][j] = 1;
+                            //console.info("sosedi "+sosedi)
+                        }
+                        else {
+                            gridDef[i][j] = 0;
+                        }
+
+                    } 
+                else if(grid[i][j] == 0 ) {
+                    let gridFam = []
+
+                        for (let x = 0; x < 3; x++) {
+                            for (let y = 0; y < 3; y++) {
+                                if(x==1 && y == 1) {
+                                    continue;
+                                }
+                                let idX = -1 + x;
+                                let idY = -1 + y;
+                                if(i+idX < 0 || j + idY < 0) {
+                                    continue;
+                                }
+                                if(i+idX >= conf.gridWidth || j+idY >= conf.gridWidth) {
+                                    continue;
+                                }
+
+                                if(grid[i+idX][j+idY] == 1) {
+                                    sosedi++
+                                } 
+                            }   
+                        }
+                    if(sosedi==3) {
+                        gridDef[i][j] = 1;
+                }
+                else {
+                    gridDef[i][j] = 0;
+                }
+                
+                }
+                
+            }
+            }
+
+            for (let i = 0; i < conf.gridWidth; i++) {
+                for(let j=0;j<conf.gridHeight;j++) {
+                grid[i][j] = gridDef[i][j];
+            }
+        }
+
+
+        ctx.fillStyle = 'rgb(255,255,255)';
+        ctx.fillRect(0, 0, conf.width, conf.height);
+        //ctx.fillStyle='rgb(0,0,200)'; 
+        //drawGrid(ctx,conf);
+        ctx.fillStyle = 'rgb(100, 150, '+100+')';
+        drawGridCell(ctx,gridDef);
     }
-  });
     </script>
+
+    <body onload="main();">
+        <style type="text/css">
+        #canvas {
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin:auto;
+        }
+        canvas { 
+            display: inline;
+        }
+    </style>
   </body>
 </html>
