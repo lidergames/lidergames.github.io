@@ -72,7 +72,7 @@
                         </div>
                 </div>
             </div>
-            <div class="container">
+           <!-- <div class="container">
                     <ul class="collection with-header">
                             <li class="collection-header transparent"><h6 class="press2play">Таблица рекордов</h6></li>
                             <li class="collection-item transparent">
@@ -89,7 +89,7 @@
                 </table>
                             </li>
                     </ul>
-            </div>
+            </div> -->
 
     </main>
    
@@ -103,25 +103,25 @@
     <script>
         $(document).ready(function(){
             $('.sidenav').sidenav();});
-        let nicks
-        while (true) {
-            var name = prompt('Введите псевдоним','');
-            console.info(name);
-            if(name!='null' && name != '' ) {
-                name_player = name;
-                break;
-        }
-        }
+        //let nicks
+        //while (true) {
+        //    var name = prompt('Введите псевдоним','');
+          //  console.info(name);
+           // if(name!='null' && name != '' ) {
+            //    name_player = name;
+             //   break;
+        //}
+        //}
         
         
         
-        dreamloSDK.init();
-        var lea = dreamloSDK.getLB();
-        for (let i = 0; i < lea.length; i++) {
-            const user = lea[i];
-            $('<tr><td>'+user.name+'</td>'+'<td>'+user.score+'</td>'+'<td>'+user.seconds+'</td></tr>').appendTo('.leaderboard_tbody');
-   
-        }
+        //dreamloSDK.init();
+        //var lea = dreamloSDK.getLB();
+        //for (let i = 0; i < lea.length; i++) {
+         //   const user = lea[i];
+          //  $('<tr><td>'+user.name+'</td>'+'<td>'+user.score+'</td>'+'<td>'+user.seconds+'</td></tr>').appendTo('.leaderboard_tbody');
+  // 
+    //    }
 
  
         

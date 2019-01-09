@@ -18,6 +18,7 @@ var actionOnClick = function() {
 }
 slashScreen.prototype = {
     preload: function(){
+        game.renderer.renderSession.roundPixels = true
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
@@ -30,6 +31,7 @@ slashScreen.prototype = {
         this.tt = 10;
         this.idx = 0;
         game.stage.backgroundColor = bg_color;
+        
 
         this.timerT = game.add.text(game.world.width/2,game.world.height-50,
             'ДО НАЧАЛА : '+ this.tt,

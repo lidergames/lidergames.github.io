@@ -1,6 +1,7 @@
 gameOver = function() { };
 gameOver.prototype = {
 	preload: function() {
+		game.renderer.renderSession.roundPixels = true;
 		game.load.spritesheet('button','game-alex-img/button.png',96,24);
 	},
 	create: function() {

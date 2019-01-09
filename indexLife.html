@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Life</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+	<script type="text/javascript">
+		var conf = {
+				width: 600,
+				height: 600,
+				cellSize : 5,
+				roundSize : 50,
+				gridWidth : 50,
+				gridHeight : 50
+			}
+		var ctx;
+		var grid = [];
+		function getRnd(min, max)
+		{
+  			return Math.random() * (max - min) + min;
+		}
+
+		function main() {
+
+			ctx = document.getElementById('canvas').getContext('2d');
+			ctx.fillStyle='rgb(0,0,200)';
+			
+			drawGrid(ctx,conf);
+
+			//drawCell(ctx,300,300,50);
+
+			let roundSize = conf.roundSize;
+			let widthGrid = roundSize;
+			let heightGrid = roundSize;
+			
+
+					for (let x = 0 ; x < widthGrid; x++) {
+						grid[x] = [];
+						for (let y = 0; y < heightGrid; y++) {
+							let veroyatnost = getRnd(0, 20);
+							if(veroyatnost > 19) {
+								grid[x][y]=1;	
+							}
+							else {
+								grid[x][y]=0;
+							}
+				
+						}
+					}
+
+
+			setInterval(tick(), 500);
+		}
+
+		function drawGrid(ctx,conf) {
+			for (let x = 0; x < conf.gridWidth; x++) {
+				ctx.beginPath();
+				ctx.moveTo(x*conf.cellSize, 0);
+				ctx.lineTo(x*conf.cellSize, conf.gridHeight*conf.cellSize);
+				ctx.closePath();
+    			ctx.stroke();
+			}
+			for (let y = 0; y < conf.gridHeight; y++) {
+					ctx.beginPath();
+				ctx.moveTo(0, y*conf.cellSize);
+				ctx.lineTo(conf.gridWidth*conf.cellSize, y*conf.cellSize);
+				ctx.closePath();
+    			ctx.stroke();
+				
+		}
+		}
+
+		function drawGridCell(ctx,grid) {
+			for (let i = 0; i < this.widthGrid; i++) {
+						for (let j = 0; j < this.heightGrid; j++) {
+							if(this.grid[i][j] == 1 ) {
+								drawCell(ctx,i*cellSize,j*cellSize,conf.cellSize)
+							} 
+						}
+					}
+		}
+
+		function drawCell(ctx,x,y,size) {
+			ctx.beginPath();
+			ctx.arc(x, y, size, 0, 360, 0);
+			ctx.fill();
+		}
+
+		function tick() {
+			let gridDef = []
+
+			for (let x = 0 ; x < conf.widthGrid; x++) {
+				gridDef[x] = [];
+				for (let y = 0; y < conf.heightGrid; y++) {
+				gridDef[x][y]=0;
+				}
+			}
+
+			for (let i = 0; i < conf.widthGrid; i++) {
+			for (let j = 0; j < conf.heightGrid; j++) {
+				let sosedi = 0;
+				if(grid[i][j] == 1 ) {
+					if(i-1>=0) {
+						if(grid[i-1][j] == 1) {
+							sosedi++;
+						}
+						if(j-1>=0) {
+							if(grid[i-1][j-1] == 1)
+								{
+									sosedi++;
+								}
+							if(grid[i][j-1] == 1) {
+								sosedi++;
+							}
+						}
+						if(j+1<conf.heightGrid) {
+							if(grid[i-1][j+1] == 1) {
+								sosedi++;
+							}
+							if(grid[i][j+1] == 1) {
+								sosedi++;
+							}
+						}
+					}
+					if(i+1<conf.widthGrid) {
+						if(grid[i+1][j] == 1) {
+							sosedi++;
+						}
+						if(j-1>=0) {
+							if(grid[i+1][j-1] == 1)
+								{
+									sosedi++;
+								}
+						}
+						if(j+1<conf.heightGrid) {
+							if(grid[i+1][j+1] == 1) {
+								sosedi++;
+							}
+						}
+					}
+					if(sosedi>=2 && sosedi<4) {
+						gridDef[i][j]=1;
+				}
+				else if(sosedi<2 || sosedi>4) {
+					//gridDef[i][j] = 0;
+				}
+				} 
+				sosedi = 0;
+
+				if(grid[i][j] == 0 ) {
+					if(i-1>=0) {
+						if(grid[i-1][j] == 1) {
+							sosedi++;
+						}
+						if(j-1>=0) {
+							if(grid[i-1][j-1] == 1)
+								{
+									sosedi++;
+								}
+							if(grid[i][j-1] == 1) {
+								sosedi++;
+							}
+						}
+						if(j+1<conf.heightGrid) {
+							if(grid[i-1][j+1] == 1) {
+								sosedi++;
+							}
+							if(grid[i][j+1] == 1) {
+								sosedi++;
+							}
+						}
+					}
+					if(i+1<conf.widthGrid) {
+						if(grid[i+1][j] == 1) {
+							sosedi++;
+						}
+						if(j-1>=0) {
+							if(grid[i+1][j-1] == 1)
+								{
+									sosedi++;
+								}
+						}
+						if(j+1<conf.heightGrid) {
+							if(grid[i+1][j+1] == 1) {
+								sosedi++;
+							}
+						}
+					}
+					if(sosedi>=2 && sosedi<4) {
+						gridDef[i][j] = 1;
+				}
+				else if(sosedi<2 || sosedi>4) {
+					//gridDef[i][j] = 1;
+				}
+				}
+				
+			}
+			}
+
+			for (let i = 0; i < conf.widthGrid; i++) {
+			for(let j=0;j<conf.heightGrid;j++) {
+				grid[i][j] = gridDef[i][j];
+			}
+		}
+		drawGridCell(ctx,grid);
+	}
+	</script>
+
+	<body onload="main();">
+  	<canvas id="canvas" width="600" height="600"></canvas>
+	</body>
+</html>
