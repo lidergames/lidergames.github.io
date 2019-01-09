@@ -43,3 +43,6 @@ background-color: transparent;
 height: 30%;
 overflow-y: scroll;
 }
+.tab {
+    margin-left: 10px;
+}
